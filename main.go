@@ -17,12 +17,10 @@ func main() {
 	// Serve from embedded filesystem
 	listener, err := net.Listen("tcp", ":0")
 	if err != nil {
-		panic(err)
+		panic(err) // TODO
 	}
-
 	port := listener.Addr().(*net.TCPAddr).Port
-
-	go http.Serve(listener, http.FileServer(http.FS(mirror)))
+	go http.Serve(listener, http.FileServer(http.FS(mirror))) // TODO run this with a channel and logging
 
 	// Initialize webview
 	w := webview.New(buildtime.Debug)

@@ -8,3 +8,11 @@ help: ## Show this help
 install: ## Install application dependencies
 	@go mod download
 	@cd mirror && yarn
+
+build: ## Build the application in debug mode
+	cd mirror && yarn build
+	go build
+
+prod: ## Build the application in production mode
+	cd mirror && yarn build
+	go build -ldflags="-s -w" -tags prod
