@@ -20,5 +20,5 @@ build: ## Build the application in debug mode
 
 prod: ## Build the application in production mode
 	@cd mirror && yarn && yarn prettier --write . && yarn build
-	@go build -ldflags="-s -w" -tags prod
+	@go build -ldflags="-s -w -H windowsgui" -tags prod
 	@make dll
