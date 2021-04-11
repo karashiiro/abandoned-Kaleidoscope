@@ -46,12 +46,19 @@ func main() {
 	defer logFile.Close()
 
 	// Serve from embedded filesystem
-	listener, err := net.Listen("tcp", ":0")
+	listener, err := net.Listen("tcp", ":0") // Open a listener on any free port
 	if err != nil {
 		log.Fatalln(err)
 	}
+
 	port := listener.Addr().(*net.TCPAddr).Port
-	go http.Serve(listener, http.FileServer(http.FS(mirror))) // TODO run this with a channel and logging
+
+	go func() {
+		err := http.Serve(listener, http.FileServer(http.FS(mirror)))
+		if err != nil {
+			log.Fatalln(err)
+		}
+	}()
 
 	// Initialize webview
 	w := webview.New(buildtime.Debug)
