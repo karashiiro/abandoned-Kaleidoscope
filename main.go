@@ -12,7 +12,7 @@ import (
 	"github.com/webview/webview"
 )
 
-//go:embed mirror/build
+//go:embed mirror/build/*
 var mirror embed.FS
 
 func initLogging() (*os.File, error) {
@@ -58,6 +58,6 @@ func main() {
 	defer w.Destroy()
 	w.SetTitle("Kaleidoscope Mirror")
 	w.SetSize(800, 600, webview.HintNone)
-	w.Navigate("http://localhost:" + fmt.Sprint(port))
+	w.Navigate("http://localhost:" + fmt.Sprint(port) + "/mirror/build")
 	w.Run()
 }
