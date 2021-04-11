@@ -10,7 +10,7 @@ import (
 	"github.com/webview/webview"
 )
 
-//go:embed mirror
+//go:embed mirror/build
 var mirror embed.FS
 
 func main() {
@@ -22,7 +22,7 @@ func main() {
 
 	port := listener.Addr().(*net.TCPAddr).Port
 
-	go http.Serve(listener, nil)
+	go http.Serve(listener, http.FileServer(http.FS(mirror)))
 
 	// Initialize webview
 	w := webview.New(buildtime.Debug)
