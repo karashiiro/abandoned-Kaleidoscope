@@ -11,7 +11,7 @@ install: ## Install application dependencies
 
 build: ## Build the application in debug mode
 	cd mirror && yarn build
-	go build
+	go build -v
 
 prod: ## Build the application in production mode
 	cd mirror && yarn build
