@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import styles from "./FaceMeshHost.module.scss";
 
 const { Camera } = require("@mediapipe/camera_utils/camera_utils");
 const { drawConnectors } = require("@mediapipe/drawing_utils/drawing_utils");
@@ -65,8 +66,8 @@ export function FaceMeshHost() {
 
 	return (
 		<div>
-			<video className="input_video" style={{ display: "none" }} ref={(el) => setVideoElement(el)}></video>
-			<canvas className="output_canvas" width="1280px" height="720px" ref={(el) => setCanvasElement(el)}></canvas>
+			<video className={styles.inputVideo} style={{ display: "none" }} ref={(el) => setVideoElement(el)}></video>
+			<canvas className={styles.outputCanvas} width="1280px" height="720px" ref={(el) => setCanvasElement(el)}></canvas>
 		</div>
 	);
 }

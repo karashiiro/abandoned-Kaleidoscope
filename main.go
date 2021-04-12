@@ -64,7 +64,7 @@ func main() {
 	w := webview.New(buildtime.Debug)
 	defer w.Destroy()
 	w.SetTitle("Kaleidoscope Mirror")
-	w.SetSize(800, 600, webview.HintNone)
+	w.SetSize(1280, 720, webview.HintNone)
 	w.Navigate("http://localhost:" + fmt.Sprint(port) + "/mirror/build")
 	w.Run()
 }
