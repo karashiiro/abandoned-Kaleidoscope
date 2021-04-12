@@ -5,6 +5,10 @@
 	"homepage": ".",
 	"private": true,
 	"dependencies": {
+		"@mediapipe/camera_utils": "^0.1.1617146909",
+		"@mediapipe/control_utils": "^0.1.1617146970",
+		"@mediapipe/drawing_utils": "^0.2.1617146986",
+		"@mediapipe/face_mesh": "^0.1.1617147239",
 		"@testing-library/jest-dom": "^5.11.4",
 		"@testing-library/react": "^11.1.0",
 		"@testing-library/user-event": "^12.1.10",
@@ -30,7 +34,8 @@
 		"analyze": "source-map-explorer 'build/static/js/*.js'",
 		"start": "react-scripts start",
 		"build": "react-scripts build",
-		"test": "react-scripts test"
+		"test": "react-scripts test",
+		"prettier": "prettier --write ."
 	},
 	"browserslist": {
 		"production": [
