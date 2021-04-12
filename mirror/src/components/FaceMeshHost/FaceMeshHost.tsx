@@ -66,7 +66,7 @@ export function FaceMeshHost() {
 
 	return (
 		<div>
-			<video className={styles.inputVideo} style={{ display: "none" }} ref={(el) => setVideoElement(el)}></video>
+			<video className={styles.inputVideo} ref={(el) => setVideoElement(el)}></video>
 			<canvas className={styles.outputCanvas} width="1280px" height="720px" ref={(el) => setCanvasElement(el)}></canvas>
 		</div>
 	);
