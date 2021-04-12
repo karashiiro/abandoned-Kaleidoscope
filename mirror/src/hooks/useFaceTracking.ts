@@ -3,10 +3,15 @@ import { useEffect } from "react";
 const { Camera } = require("@mediapipe/camera_utils/camera_utils");
 const { FaceMesh } = require("@mediapipe/face_mesh/face_mesh");
 
+export interface FaceTrackingResults {
+	image: CanvasImageSource;
+	landmarks: any;
+}
+
 export function useFaceTracking(
 	videoElement: HTMLVideoElement,
 	canvasElement: HTMLCanvasElement,
-	onResults: (canvasCtx: CanvasRenderingContext2D, results: any) => void,
+	onResults: (canvasCtx: CanvasRenderingContext2D, results: FaceTrackingResults) => void,
 ) {
 	useEffect(() => {
 		if (videoElement == null || canvasElement == null) {
@@ -26,7 +31,10 @@ export function useFaceTracking(
 			minTrackingConfidence: 0.5,
 		});
 		faceMesh.onResults((results: any) => {
-			onResults(canvasCtx!, results);
+			onResults(canvasCtx!, {
+				image: results.image,
+				landmarks: results.multiFaceLandmarks[0],
+			});
 		});
 
 		const camera = new Camera(videoElement!, {
