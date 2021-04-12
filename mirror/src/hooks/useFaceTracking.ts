@@ -9,8 +9,8 @@ export interface FaceTrackingResults {
 }
 
 export function useFaceTracking(
-	videoElement: HTMLVideoElement,
-	canvasElement: HTMLCanvasElement,
+	videoElement: HTMLVideoElement | null | undefined,
+	canvasElement: HTMLCanvasElement | null | undefined,
 	onResults: (canvasCtx: CanvasRenderingContext2D, results: FaceTrackingResults) => void,
 ) {
 	useEffect(() => {
@@ -37,9 +37,9 @@ export function useFaceTracking(
 			});
 		});
 
-		const camera = new Camera(videoElement!, {
+		const camera = new Camera(videoElement, {
 			onFrame: async () => {
-				await faceMesh.send({ image: videoElement! });
+				await faceMesh.send({ image: videoElement });
 			},
 			width: 1280,
 			height: 720,
