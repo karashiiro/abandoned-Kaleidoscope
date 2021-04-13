@@ -1,13 +1,16 @@
 package main
 
 import (
+	"bytes"
 	"embed"
 	"fmt"
+	"image/png"
 	"net"
 	"net/http"
 	"os"
 
 	"github.com/karashiiro/Kaleidoscope/buildtime"
+	"github.com/karashiiro/justeyecenters"
 	log "github.com/sirupsen/logrus"
 	"github.com/webview/webview"
 )
@@ -63,8 +66,27 @@ func main() {
 	// Initialize webview
 	w := webview.New(buildtime.Debug)
 	defer w.Destroy()
+
 	w.SetTitle("Kaleidoscope Mirror")
 	w.SetSize(1280, 720, webview.HintNone)
+
+	w.Bind("predictEyeCenter", func(req string) (string, error) {
+		imgBytes := []byte(req)
+		imgBuf := bytes.Buffer{}
+		imgBuf.Write(imgBytes)
+		img, err := png.Decode(&imgBuf)
+		if err != nil {
+			return "", err
+		}
+
+		_, err = justeyecenters.GetEyeCenter(img)
+		if err != nil {
+			return "", err
+		}
+
+		return "", nil
+	})
+
 	w.Navigate("http://localhost:" + fmt.Sprint(port) + "/mirror/build")
 	w.Run()
 }
