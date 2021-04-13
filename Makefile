@@ -2,7 +2,7 @@ SHELL := /bin/bash
 .DEFAULT_GOAL := help 
 
 help: ## Show this help
-	@echo Dependencies: go yarn
+	@echo Dependencies: go yarn [upx]
 	@egrep -h '\s##\s' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 install: ## Install application dependencies
@@ -18,7 +18,10 @@ build: ## Build the application in debug mode
 	@go build -v
 	@make dll
 
-prod: ## Build the application in production mode
+prod: ## Build the application in production mode (requires UPX)
 	@cd mirror && yarn && yarn prettier --write . && yarn build
 	@go build -ldflags="-s -w -H windowsgui" -tags prod
 	@make dll
+	@upx Kaleidoscope.exe
+	@upx webview.dll
+	@upx WebView2Loader.dll
