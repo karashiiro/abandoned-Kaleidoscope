@@ -30,7 +30,8 @@ export function useFaceTracking(
 			minDetectionConfidence: 0.5,
 			minTrackingConfidence: 0.5,
 		});
-		faceMesh.onResults((results: any) => {
+		faceMesh.onResults(async (results: any) => {
+			console.log(results);
 			onResults(canvasCtx!, {
 				image: results.image,
 				landmarks: results.multiFaceLandmarks[0],
