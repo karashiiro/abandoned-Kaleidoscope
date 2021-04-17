@@ -67,7 +67,7 @@ interface Dimensions {
 	height: number;
 }
 
-interface Rect {
+export interface Rect {
 	left: number;
 	top: number;
 	right: number;
