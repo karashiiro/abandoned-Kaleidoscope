@@ -1,11 +1,13 @@
 import { useEffect } from "react";
 
 const { Camera } = require("@mediapipe/camera_utils/camera_utils");
-const { FaceMesh } = require("@mediapipe/face_mesh/face_mesh");
+const { FaceMesh, FACEMESH_LEFT_EYE, FACEMESH_RIGHT_EYE } = require("@mediapipe/face_mesh/face_mesh");
+
+export type FaceLandmarks = { x: number; y: number; z: number }[];
 
 export interface FaceTrackingResults {
 	image: CanvasImageSource;
-	landmarks: any;
+	landmarks: FaceLandmarks;
 }
 
 export function useFaceTracking(
@@ -17,6 +19,11 @@ export function useFaceTracking(
 		if (videoElement == null || canvasElement == null) {
 			return;
 		}
+
+		const dims = {
+			width: 1280,
+			height: 720,
+		};
 
 		const canvasCtx = canvasElement.getContext("2d");
 
@@ -35,7 +42,10 @@ export function useFaceTracking(
 				return;
 			}
 
-			console.log(results);
+			const rightEyeBounds = getEyeBounds(results.multiFaceLandmarks[0], FACEMESH_RIGHT_EYE, dims);
+			const leftEyeBounds = getEyeBounds(results.multiFaceLandmarks[0], FACEMESH_LEFT_EYE, dims);
+			console.log(rightEyeBounds, leftEyeBounds);
+
 			onResults(canvasCtx!, {
 				image: results.image,
 				landmarks: results.multiFaceLandmarks[0],
@@ -46,9 +56,54 @@ export function useFaceTracking(
 			onFrame: async () => {
 				await faceMesh.send({ image: videoElement });
 			},
-			width: 1280,
-			height: 720,
+			...dims,
 		});
 		camera.start();
 	}, [videoElement, canvasElement, onResults]);
+}
+
+interface Dimensions {
+	width: number;
+	height: number;
+}
+
+interface Rect {
+	left: number;
+	top: number;
+	right: number;
+	bottom: number;
+}
+
+function getEyeBounds(faceMesh: FaceLandmarks, eyeConnectors: [number, number][], dims: Dimensions): Rect {
+	const bounds: Rect = {
+		left: 1.0,
+		top: 1.0,
+		right: 0.0,
+		bottom: 0.0,
+	};
+
+	const eyeMarkers = new Set(eyeConnectors.flat());
+	eyeMarkers.forEach((n) => {
+		const x = faceMesh[n].x;
+		const y = faceMesh[n].y;
+
+		if (x < bounds.left) {
+			bounds.left = x;
+		} else if (x > bounds.right) {
+			bounds.right = x;
+		}
+
+		if (y < bounds.top) {
+			bounds.top = y;
+		} else if (y > bounds.bottom) {
+			bounds.bottom = y;
+		}
+	});
+
+	bounds.left = Math.floor(bounds.left * dims.width);
+	bounds.top = Math.floor(bounds.top * dims.height);
+	bounds.right = Math.floor(bounds.right * dims.width);
+	bounds.bottom = Math.floor(bounds.bottom * dims.height);
+
+	return bounds;
 }
