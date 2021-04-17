@@ -1,12 +1,20 @@
 import { Rect } from "../hooks";
 
-declare function _predictEyeCenter(imageAndBounds: string): Promise<string>;
+interface Point {
+	x: number;
+	y: number;
+}
 
-export function predictEyeCenter(image: string, bounds: Rect): Promise<string> {
+declare function _predictEyeCenter(imageAndBounds: string): Promise<Point>;
+
+export function predictEyeCenter(image: string, bounds: Rect): Promise<Point> {
 	if (_predictEyeCenter != null) {
 		return _predictEyeCenter(JSON.stringify({ image, bounds }));
 	}
 	return (async () => {
-		return JSON.stringify({});
+		return {
+			x: 0,
+			y: 0,
+		};
 	})();
 }

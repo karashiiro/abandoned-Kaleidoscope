@@ -3,13 +3,16 @@ package main
 import (
 	"bytes"
 	"embed"
+	"encoding/json"
 	"fmt"
+	"image"
 	"image/png"
 	"net"
 	"net/http"
 	"os"
 
 	"github.com/karashiiro/Kaleidoscope/buildtime"
+	"github.com/karashiiro/Kaleidoscope/interop"
 	"github.com/karashiiro/justeyecenters"
 	log "github.com/sirupsen/logrus"
 	"github.com/webview/webview"
@@ -71,20 +74,45 @@ func main() {
 	w.SetSize(1280, 720, webview.HintNone)
 
 	w.Bind("predictEyeCenter", func(req string) (string, error) {
-		imgBytes := []byte(req)
+		args := interop.PredictEyeCenterArgs{}
+		err := json.Unmarshal([]byte(req), &args)
+		if err != nil {
+			return "", err
+		}
+
+		// Preprocess the frame
 		imgBuf := bytes.Buffer{}
-		imgBuf.Write(imgBytes)
+		imgBuf.Write(args.Image)
 		img, err := png.Decode(&imgBuf)
 		if err != nil {
 			return "", err
 		}
 
-		_, err = justeyecenters.GetEyeCenter(img)
+		croppedImg := img.(interface {
+			SubImage(r image.Rectangle) image.Image
+		}).SubImage(image.Rect(args.Bounds.Left, args.Bounds.Top, args.Bounds.Right, args.Bounds.Bottom))
+
+		// Calculate the eye center location
+		center, err := justeyecenters.GetEyeCenter(croppedImg)
 		if err != nil {
 			return "", err
 		}
 
-		return "", nil
+		// Make its naming consistent with the other species is difficult
+		ret := &struct {
+			X int `json:"x"`
+			Y int `json:"y"`
+		}{
+			X: center.X,
+			Y: center.Y,
+		}
+
+		retBytes, err := json.Marshal(ret)
+		if err != nil {
+			return "", err
+		}
+
+		return string(retBytes), nil
 	})
 
 	w.Navigate("http://localhost:" + fmt.Sprint(port) + "/mirror/build")
