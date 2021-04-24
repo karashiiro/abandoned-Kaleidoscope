@@ -98,7 +98,7 @@ func main() {
 			return "", err
 		}
 
-		// Make its naming consistent with the other species is difficult
+		// Put the output in our interop struct
 		ret := &struct {
 			X int `json:"x"`
 			Y int `json:"y"`
