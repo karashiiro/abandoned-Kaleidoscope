@@ -6,4 +6,4 @@
 ## Development
 
 ### Windows
-On Windows, [MinGW](https://sourceforge.net/projects/mingw/files/Installer/mingw-get-setup.exe/download) with C++ packages is required for building the webview binaries.
+On Windows, [MSYS2](https://www.msys2.org/) is required for building the project, in addition to the Go toolchain.
