@@ -17,7 +17,7 @@ export function FaceMeshHost() {
 	const [videoElement, setVideoElement] = useState<HTMLVideoElement | null>();
 	const [canvasElement, setCanvasElement] = useState<HTMLCanvasElement | null>();
 
-	useFaceTracking(videoElement, canvasElement, (canvasCtx, { image, landmarks }) => {
+	useFaceTracking(videoElement, canvasElement, (canvasCtx, { image, landmarks, eyeCenters }) => {
 		if (canvasElement == null) {
 			return;
 		}
@@ -32,6 +32,8 @@ export function FaceMeshHost() {
 		drawConnectors(canvasCtx, landmarks, FACEMESH_LEFT_EYEBROW, { color: "#30FF30" });
 		drawConnectors(canvasCtx, landmarks, FACEMESH_FACE_OVAL, { color: "#E0E0E0" });
 		drawConnectors(canvasCtx, landmarks, FACEMESH_LIPS, { color: "#E0E0E0" });
+		canvasCtx.fillRect(eyeCenters.left.x, eyeCenters.left.y, 1, 1);
+		canvasCtx.fillRect(eyeCenters.right.x, eyeCenters.right.y, 1, 1);
 		canvasCtx.restore();
 	});
 
