@@ -6,4 +6,4 @@
 ## Development
 
 ### Windows
-On Windows, [MSYS2](https://www.msys2.org/) is required for building the project, in addition to the Go toolchain.
+On Windows, [MSYS2](https://www.msys2.org/) with `mingw-w64-x86_64-toolchain` or similar is required for building the project, in addition to the Go toolchain.
