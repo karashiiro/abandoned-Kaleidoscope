@@ -49,9 +49,10 @@ export function useFaceTracking(
 
 			const rightEyeBounds = getEyeBounds(results.multiFaceLandmarks[0], FACEMESH_RIGHT_EYE, dims);
 			const leftEyeBounds = getEyeBounds(results.multiFaceLandmarks[0], FACEMESH_LEFT_EYE, dims);
+			const frame = results.image.toDataURL();
 			const eyeCenters = {
-				right: await predictEyeCenter(results.image, rightEyeBounds),
-				left: await predictEyeCenter(results.image, leftEyeBounds),
+				right: await predictEyeCenter(frame, rightEyeBounds),
+				left: await predictEyeCenter(frame, leftEyeBounds),
 			};
 
 			onResults(canvasCtx!, {

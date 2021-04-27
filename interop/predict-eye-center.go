@@ -1,7 +1,7 @@
 package interop
 
 type PredictEyeCenterArgs struct {
-	Image  []byte `json:"image"`
+	Image  string `json:"image"`
 	Bounds struct {
 		Left   int `json:"left"`
 		Top    int `json:"top"`

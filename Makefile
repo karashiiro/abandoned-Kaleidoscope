@@ -20,6 +20,10 @@ build: ## Build the application in debug mode
 	@go build -v
 	@make dll
 
+build_native_only: ## Build the native application (only) in debug mode
+	@go build -v
+	@make dll
+
 prod: ## Build the application in production mode (requires UPX)
 	@cd mirror && yarn && yarn prettier --write . && yarn build
 	@go build -ldflags="-s -w -H windowsgui" -tags prod

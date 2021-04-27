@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"embed"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"image"
@@ -73,7 +74,7 @@ func main() {
 	w.SetTitle("Kaleidoscope Mirror")
 	w.SetSize(1280, 720, webview.HintNone)
 
-	w.Bind("predictEyeCenter", func(req string) (string, error) {
+	w.Bind("_predictEyeCenter", func(req string) (string, error) {
 		args := interop.PredictEyeCenterArgs{}
 		err := json.Unmarshal([]byte(req), &args)
 		if err != nil {
@@ -81,8 +82,13 @@ func main() {
 		}
 
 		// Preprocess the frame
-		imgBuf := bytes.Buffer{}
-		imgBuf.Write(args.Image)
+		rawImage, err := base64.StdEncoding.DecodeString(args.Image[len("data:image/png;base64,"):])
+		if err != nil {
+			return "", err
+		}
+
+		var imgBuf bytes.Buffer
+		imgBuf.Write(rawImage)
 		img, err := png.Decode(&imgBuf)
 		if err != nil {
 			return "", err
