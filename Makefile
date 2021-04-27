@@ -16,7 +16,7 @@ dll: ## Download the Windows DLLs from webview/webview_csharp
 	curl -O $(WEBVIEW2LOADER_DLL) -O $(WEBVIEW_DLL)
 
 build: ## Build the application in debug mode
-	@cd mirror && yarn && yarn prettier --write . && yarn build
+	@cd mirror && yarn && yarn format && yarn build
 	@go build -v
 	@make dll
 
