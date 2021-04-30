@@ -1,20 +1,13 @@
 package main
 
 import (
-	"bytes"
 	"embed"
-	"encoding/base64"
-	"encoding/json"
 	"fmt"
-	"image"
-	"image/png"
 	"net"
 	"net/http"
 	"os"
 
 	"github.com/karashiiro/Kaleidoscope/buildtime"
-	"github.com/karashiiro/Kaleidoscope/interop"
-	"github.com/karashiiro/justeyecenters"
 	log "github.com/sirupsen/logrus"
 	"github.com/webview/webview"
 )
@@ -73,53 +66,6 @@ func main() {
 
 	w.SetTitle("Kaleidoscope Mirror")
 	w.SetSize(1280, 720, webview.HintNone)
-
-	w.Bind("_predictEyeCenter", func(req string) (string, error) {
-		args := interop.PredictEyeCenterArgs{}
-		err := json.Unmarshal([]byte(req), &args)
-		if err != nil {
-			return "", err
-		}
-
-		// Preprocess the frame
-		rawImage, err := base64.StdEncoding.DecodeString(args.Image[len("data:image/png;base64,"):])
-		if err != nil {
-			return "", err
-		}
-
-		var imgBuf bytes.Buffer
-		imgBuf.Write(rawImage)
-		img, err := png.Decode(&imgBuf)
-		if err != nil {
-			return "", err
-		}
-
-		croppedImg := img.(interface {
-			SubImage(r image.Rectangle) image.Image
-		}).SubImage(image.Rect(args.Bounds.Left, args.Bounds.Top, args.Bounds.Right, args.Bounds.Bottom))
-
-		// Calculate the eye center location
-		center, err := justeyecenters.GetEyeCenter(croppedImg)
-		if err != nil {
-			return "", err
-		}
-
-		// Put the output in our interop struct
-		ret := &struct {
-			X int `json:"x"`
-			Y int `json:"y"`
-		}{
-			X: center.X,
-			Y: center.Y,
-		}
-
-		retBytes, err := json.Marshal(ret)
-		if err != nil {
-			return "", err
-		}
-
-		return string(retBytes), nil
-	})
 
 	w.Navigate("http://localhost:" + fmt.Sprint(port) + "/mirror/build")
 	w.Run()

@@ -1,5 +1,5 @@
+import { getEyeCenter, Rect } from "justeyecenters";
 import { useEffect } from "react";
-import { predictEyeCenter } from "../interop";
 
 const { Camera } = require("@mediapipe/camera_utils/camera_utils");
 const { FaceMesh, FACEMESH_LEFT_EYE, FACEMESH_RIGHT_EYE } = require("@mediapipe/face_mesh/face_mesh");
@@ -51,8 +51,8 @@ export function useFaceTracking(
 			const leftEyeBounds = getEyeBounds(results.multiFaceLandmarks[0], FACEMESH_LEFT_EYE, dims);
 			const frame = results.image.toDataURL();
 			const eyeCenters = {
-				right: await predictEyeCenter(frame, rightEyeBounds),
-				left: await predictEyeCenter(frame, leftEyeBounds),
+				right: await getEyeCenter(frame, rightEyeBounds),
+				left: await getEyeCenter(frame, leftEyeBounds),
 			};
 
 			onResults(canvasCtx!, {
@@ -75,13 +75,6 @@ export function useFaceTracking(
 interface Dimensions {
 	width: number;
 	height: number;
-}
-
-export interface Rect {
-	left: number;
-	top: number;
-	right: number;
-	bottom: number;
 }
 
 function getEyeBounds(faceMesh: FaceLandmarks, eyeConnectors: [number, number][], dims: Dimensions): Rect {
