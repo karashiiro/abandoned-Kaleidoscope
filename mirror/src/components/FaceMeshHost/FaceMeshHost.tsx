@@ -24,7 +24,8 @@ export function FaceMeshHost() {
 
 		canvasCtx.save();
 		canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-		canvasCtx.drawImage(image, 0, 0, canvasElement.width, canvasElement.height);
+		canvasCtx.fillStyle = "black";
+		canvasCtx.fillRect(0, 0, canvasElement.width, canvasElement.height);
 		drawConnectors(canvasCtx, landmarks, FACEMESH_TESSELATION, { color: "#C0C0C070", lineWidth: 1 });
 		drawConnectors(canvasCtx, landmarks, FACEMESH_RIGHT_EYE, { color: "#FF3030" });
 		drawConnectors(canvasCtx, landmarks, FACEMESH_RIGHT_EYEBROW, { color: "#FF3030" });
