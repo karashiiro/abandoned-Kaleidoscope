@@ -7062,10 +7062,10 @@ jsprim@^1.2.2:
     array-includes "^3.1.2"
     object.assign "^4.1.2"
 
-justeyecenters@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/justeyecenters/-/justeyecenters-0.1.3.tgz#ef5171d31e6837b31ea5a5eb03060b141394523c"
-  integrity sha512-g/cZ593gPmoZyxa3HPyrC3Z8iUIqW8+NHcKEH5/CU0tkFZ+h5VIVdkVvSqpsZpRnaVkTIElLVOYLzCB1X4TNkw==
+justeyecenters@^0.1.19:
+  version "0.1.19"
+  resolved "https://registry.yarnpkg.com/justeyecenters/-/justeyecenters-0.1.19.tgz#c31721b023af00ab0de829020aeff616163752c5"
+  integrity sha512-hkaGkemXPT8nu6gxP0u1JyO0Ui4DSHnoZ2//RFYQEaW9SGxIQCPbMSF4szcplo2jD527Z9Sv3RtaC7zgGu3l/g==
 
 killable@^1.0.1:
   version "1.0.1"
